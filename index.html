@@ -102,8 +102,8 @@
     border-bottom: 2px solid #2a2d38;
   }
   .day-header.today {
-    color: #d4a574;
-    border-bottom-color: #d4a574;
+    color: #3ecfb4;
+    border-bottom-color: #3ecfb4;
   }
   .day-header .date-num {
     display: block;
@@ -113,7 +113,31 @@
     color: #b0b4c8;
   }
   .day-header.today .date-num {
-    color: #d4a574;
+    color: #3ecfb4;
+  }
+  .day-header .exercise-bar {
+    display: block;
+    margin: 8px 4px 0;
+    padding: 5px 8px;
+    background: rgba(52, 152, 219, 0.85);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-radius: 4px;
+    text-transform: none;
+    line-height: 1.25;
+  }
+  .day-header .exercise-bar .exercise-label {
+    display: block;
+    font-size: 12px;
+    opacity: 0.9;
+    margin-bottom: 1px;
+  }
+  .day-header .exercise-bar .exercise-hours {
+    display: block;
+    font-size: 14px;
+    font-weight: 800;
   }
   .time-header {
     border-bottom: 2px solid #2a2d38;
@@ -126,7 +150,7 @@
     min-height: 0;
   }
   .day-column.today-col {
-    background: rgba(212, 165, 116, 0.04);
+    background: rgba(62, 207, 180, 0.04);
   }
   .day-column.past-col {
     background: rgba(0, 0, 0, 0.25);
@@ -156,7 +180,7 @@
     border-top: 1px solid #252830;
   }
 
-  /* Event blocks — single warm oak/amber color */
+  /* Event blocks — bright green for visibility on TV */
   .event {
     position: absolute;
     left: 4px;
@@ -168,10 +192,10 @@
     flex-direction: column;
     justify-content: center;
     font-weight: 600;
-    border-left: 6px solid #d4a574;
+    border-left: 6px solid #4ade80;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    background: rgba(212, 165, 116, 0.28);
-    color: #f8f1e6;
+    background: rgba(74, 222, 128, 0.28);
+    color: #effbf3;
   }
   .event .client-name {
     font-size: 28px;
@@ -217,9 +241,9 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: #d4a574;
+    background: #3ecfb4;
     z-index: 10;
-    box-shadow: 0 0 8px rgba(212, 165, 116, 0.55);
+    box-shadow: 0 0 8px rgba(62, 207, 180, 0.55);
   }
   .now-dot {
     position: absolute;
@@ -228,7 +252,7 @@
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    background: #d4a574;
+    background: #3ecfb4;
   }
 
   /* ── FOOTER ── */
@@ -326,10 +350,10 @@
     }
     .m-day.m-today .m-day-name,
     .m-day.m-today .m-day-date {
-      color: #d4a574;
+      color: #3ecfb4;
     }
     .m-day.m-today .m-day-header {
-      border-bottom-color: #d4a574;
+      border-bottom-color: #3ecfb4;
     }
     .m-day.m-past .m-day-header,
     .m-day.m-past .m-event {
@@ -341,6 +365,17 @@
       color: #3a3d4a;
       font-weight: 600;
     }
+    .m-exercise-bar {
+      display: block;
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: rgba(52, 152, 219, 0.85);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
 
     .m-event {
       display: flex;
@@ -349,9 +384,9 @@
       padding: 12px 14px;
       margin-top: 8px;
       border-radius: 10px;
-      border-left: 5px solid #d4a574;
-      background: rgba(212, 165, 116, 0.22);
-      color: #f8f1e6;
+      border-left: 5px solid #4ade80;
+      background: rgba(74, 222, 128, 0.22);
+      color: #effbf3;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
     .m-event .m-event-info {
@@ -481,6 +516,25 @@ function isSameDay(d1, d2) {
          d1.getDate() === d2.getDate();
 }
 
+// Compact formatter for the exercise room bar: 8a, 8:30a, 12p, etc.
+function formatHourCompact(h) {
+  const hour = Math.floor(h);
+  const min = Math.round((h - hour) * 60);
+  let displayHour = hour % 12;
+  if (displayHour === 0) displayHour = 12;
+  const period = (hour < 12 || hour === 24) ? 'a' : 'p';
+  if (min === 0) return displayHour + period;
+  return displayHour + ':' + String(min).padStart(2, '0') + period;
+}
+
+function formatExerciseRanges(events) {
+  return events
+    .slice()
+    .sort((a, b) => a.startHour - b.startHour)
+    .map(e => formatHourCompact(e.startHour) + '–' + formatHourCompact(e.endHour))
+    .join(', ');
+}
+
 // ══════════════════════════════════════════════
 // FETCH EVENTS FROM GOOGLE CALENDAR API
 // ══════════════════════════════════════════════
@@ -529,6 +583,7 @@ async function fetchEvents() {
 
       const title = (ev.summary || '(Untitled)').trim();
       const location = (ev.location || '').trim();
+      const isExerciseRoom = title.toLowerCase() === 'exercise room';
 
       // For an all-day event, place it at the top of the day(s) it covers.
       // For multi-day timed events, only render on the start day to keep things sane.
@@ -545,6 +600,7 @@ async function fetchEvents() {
           endHour: CONFIG.HOUR_START + 0.75,
           dayIndex: start.getDay(),
           isAllDay: true,
+          isExerciseRoom,
         }];
       }
 
@@ -553,6 +609,7 @@ async function fetchEvents() {
         startHour, endHour,
         dayIndex: start.getDay(),
         isAllDay: false,
+        isExerciseRoom,
       }];
     });
 
@@ -606,7 +663,18 @@ function buildCalendar() {
     const isToday = isSameDay(d, now);
     const isPast = d < now && !isToday;
     hdr.className = 'day-header' + (isToday ? ' today' : '') + (isPast ? ' past' : '');
-    hdr.innerHTML = `${DAYS[i]}<span class="date-num">${d.getDate()}</span>`;
+    let html = `${DAYS[i]}<span class="date-num">${d.getDate()}</span>`;
+
+    // Exercise Room: render as a compact blue bar, not a time-grid block
+    const exerciseToday = currentEvents.filter(e => e.dayIndex === i && e.isExerciseRoom);
+    if (exerciseToday.length) {
+      html += `<span class="exercise-bar">
+        <span class="exercise-label">Exercise Room</span>
+        <span class="exercise-hours">${formatExerciseRanges(exerciseToday)}</span>
+      </span>`;
+    }
+
+    hdr.innerHTML = html;
     cal.appendChild(hdr);
   });
 
@@ -642,8 +710,8 @@ function buildCalendar() {
       col.appendChild(line);
     }
 
-    // Events for this day
-    const dayEvents = currentEvents.filter(e => e.dayIndex === dayIdx);
+    // Events for this day (Exercise Room is rendered as a header bar instead)
+    const dayEvents = currentEvents.filter(e => e.dayIndex === dayIdx && !e.isExerciseRoom);
     dayEvents.forEach(ev => {
       // Clamp into displayed range so off-hours events still show at the edge.
       const clampedStart = Math.max(ev.startHour, CONFIG.HOUR_START);
@@ -728,8 +796,17 @@ function buildMobileView() {
       <span class="m-day-date">${dateStr}</span>
     </div>`;
 
+    // Exercise Room: render as a blue bar (not as a regular event card)
+    const exerciseToday = currentEvents.filter(e => e.dayIndex === dayIdx && e.isExerciseRoom);
+    if (exerciseToday.length) {
+      const bar = document.createElement('div');
+      bar.className = 'm-exercise-bar';
+      bar.textContent = 'Exercise Room: ' + formatExerciseRanges(exerciseToday);
+      section.appendChild(bar);
+    }
+
     const dayEvents = currentEvents
-      .filter(e => e.dayIndex === dayIdx)
+      .filter(e => e.dayIndex === dayIdx && !e.isExerciseRoom)
       .sort((a, b) => a.startHour - b.startHour);
 
     if (dayEvents.length === 0) {
