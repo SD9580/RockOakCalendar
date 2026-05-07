@@ -20,7 +20,6 @@
     flex-direction: column;
   }
 
-  /* Mobile view hidden on desktop */
   .mobile-view { display: none; }
 
   /* ── HEADER ── */
@@ -28,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px 14px;
+    padding: 18px 40px 14px;
     border-bottom: 2px solid #2a2d38;
   }
   .header-center {
@@ -42,18 +41,31 @@
   }
   .header-left {
     display: flex;
-    align-items: baseline;
-    gap: 18px;
+    align-items: center;
+    gap: 22px;
     flex-wrap: wrap;
+  }
+  .header .logo {
+    height: 64px;
+    width: auto;
+    display: block;
+    opacity: 0.95;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+  }
+  .header .title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
   .header h1 {
     font-size: 42px;
     font-weight: 800;
     letter-spacing: -0.5px;
     color: #fff;
+    line-height: 1;
   }
   .header .subtitle {
-    font-size: 15px;
+    font-size: 14px;
     color: #7a7e94;
     font-weight: 500;
     max-width: 360px;
@@ -83,7 +95,7 @@
   .calendar {
     flex: 1;
     display: grid;
-    grid-template-columns: 80px repeat(7, 1fr);
+    /* grid-template-columns is set dynamically in JS so today gets 1.6fr */
     grid-template-rows: auto 1fr;
     gap: 0;
     padding: 0 20px 20px;
@@ -93,17 +105,19 @@
   /* Day headers */
   .day-header {
     text-align: center;
-    padding: 14px 0 10px;
+    padding: 14px 6px 12px;
     font-weight: 700;
     font-size: 18px;
     color: #7b7f96;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-bottom: 2px solid #2a2d38;
+    border-bottom: 2px solid #3a3d4a;
+    border-left: 2px solid #3a3d4a;
   }
   .day-header.today {
     color: #3ecfb4;
     border-bottom-color: #3ecfb4;
+    background: rgba(62, 207, 180, 0.10);
   }
   .day-header .date-num {
     display: block;
@@ -115,51 +129,43 @@
   .day-header.today .date-num {
     color: #3ecfb4;
   }
+  /* Big exercise bar — sized to match event font weight */
   .day-header .exercise-bar {
     display: block;
-    margin: 8px 4px 0;
-    padding: 5px 8px;
-    background: rgba(52, 152, 219, 0.85);
+    margin: 10px 4px 0;
+    padding: 8px 10px;
+    background: rgba(52, 152, 219, 0.92);
     color: #ffffff;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    border-radius: 4px;
+    border-radius: 6px;
     text-transform: none;
-    line-height: 1.25;
+    line-height: 1.15;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
   .day-header .exercise-bar .exercise-label {
     display: block;
-    font-size: 12px;
-    opacity: 0.9;
-    margin-bottom: 1px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
   }
   .day-header .exercise-bar .exercise-hours {
     display: block;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 800;
+    margin-top: 2px;
   }
   .time-header {
-    border-bottom: 2px solid #2a2d38;
+    border-bottom: 2px solid #3a3d4a;
   }
 
   /* Day columns */
   .day-column {
     position: relative;
-    border-left: 1px solid #252830;
+    border-left: 2px solid #3a3d4a;
     min-height: 0;
   }
   .day-column.today-col {
-    background: rgba(62, 207, 180, 0.04);
-  }
-  .day-column.past-col {
-    background: rgba(0, 0, 0, 0.25);
-  }
-  .day-column.past-col .event {
-    opacity: 0.45;
-  }
-  .day-header.past {
-    opacity: 0.45;
+    background: rgba(62, 207, 180, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(62, 207, 180, 0.25);
   }
 
   .time-labels {
@@ -177,14 +183,12 @@
     position: absolute;
     left: 0;
     right: 0;
-    border-top: 1px solid #252830;
+    border-top: 1px solid #2a2d38;
   }
 
-  /* Event blocks — bright green for visibility on TV */
+  /* Event blocks — bright green */
   .event {
     position: absolute;
-    left: 4px;
-    right: 4px;
     border-radius: 8px;
     padding: 10px 14px;
     overflow: hidden;
@@ -194,27 +198,27 @@
     font-weight: 600;
     border-left: 6px solid #4ade80;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    background: rgba(74, 222, 128, 0.28);
+    background: rgba(74, 222, 128, 0.30);
     color: #effbf3;
   }
   .event .client-name {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 800;
     line-height: 1.15;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     word-break: break-word;
   }
   .event .time-range {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    opacity: 0.9;
+    opacity: 0.92;
     margin-top: 3px;
   }
   .event .space-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     opacity: 0.65;
     margin-top: 2px;
@@ -222,18 +226,24 @@
 
   /* Compact layout for short bookings (≤2 hours) */
   .event.compact {
-    padding: 2px 10px;
+    padding: 4px 10px;
   }
   .event.compact .client-name {
-    font-size: 22px;
+    font-size: 20px;
+    -webkit-line-clamp: 2;
   }
   .event.compact .time-range {
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 1px;
   }
   .event.compact .space-name {
     display: none;
   }
+
+  /* Narrow lanes (3+ side by side) — shrink fonts a touch so titles fit */
+  .event.narrow .client-name { font-size: 20px; }
+  .event.narrow .time-range { font-size: 15px; }
+  .event.narrow.compact .client-name { font-size: 17px; }
 
   /* ── NOW INDICATOR ── */
   .now-line {
@@ -313,8 +323,10 @@
       flex-direction: column;
       align-items: flex-start;
       padding: 16px 20px 12px;
-      gap: 4px;
+      gap: 10px;
     }
+    .header-left { gap: 14px; }
+    .header .logo { height: 44px; }
     .header h1 { font-size: 22px; }
     .header .subtitle { font-size: 12px; max-width: none; }
     .header .week-label { font-size: 20px; }
@@ -355,10 +367,6 @@
     .m-day.m-today .m-day-header {
       border-bottom-color: #3ecfb4;
     }
-    .m-day.m-past .m-day-header,
-    .m-day.m-past .m-event {
-      opacity: 0.45;
-    }
     .m-no-events {
       padding: 12px 0;
       font-size: 14px;
@@ -368,12 +376,12 @@
     .m-exercise-bar {
       display: block;
       margin-top: 8px;
-      padding: 6px 12px;
-      background: rgba(52, 152, 219, 0.85);
+      padding: 8px 14px;
+      background: rgba(52, 152, 219, 0.92);
       color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 4px;
+      font-size: 17px;
+      font-weight: 800;
+      border-radius: 6px;
       letter-spacing: 0.3px;
     }
 
@@ -423,8 +431,11 @@
 
 <div class="header">
   <div class="header-left">
-    <h1>Rock Oak Events</h1>
-    <span class="subtitle">Live weekly schedule — refreshes every 15 minutes</span>
+    <img src="logo.png" alt="Rock Oak" class="logo">
+    <div class="title-block">
+      <h1>Rock Oak Events</h1>
+      <span class="subtitle">Live 7-day schedule — refreshes every 15 minutes</span>
+    </div>
   </div>
   <div class="header-center">
     <div class="week-label" id="weekLabel"></div>
@@ -445,57 +456,51 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-// CONFIGURATION  ──  EDIT THESE TWO VALUES
-// ══════════════════════════════════════════════
 const CONFIG = {
-  // Your Google Calendar ID (looks like: something@group.calendar.google.com,
-  // or your gmail address for your primary calendar).
-  // Get it from: Google Calendar → Settings → [your calendar] → "Integrate calendar" → Calendar ID
   CALENDAR_ID: '5293f7d8a49ce74df477c7b2a900d51047683d6617ed664d75626ea39a3fcb71@group.calendar.google.com',
-
-  // Your Google Cloud API key (restricted to the Calendar API).
-  // Setup steps are in README.md.
   API_KEY: 'AIzaSyBm7R1Vo40uFCWLfnhQGWP1SysuvBMQHLU',
-
-  // Display settings
   TIMEZONE: 'America/New_York',
-  HOUR_START: 7,    // 7 AM
-  HOUR_END: 23,     // 11 PM
-  REFRESH_INTERVAL: 15 * 60 * 1000,  // 15 minutes
+  HOUR_START: 7,
+  HOUR_END: 23,
+  REFRESH_INTERVAL: 15 * 60 * 1000,
+  TODAY_COLUMN_WEIGHT: 1.6,
 };
 
-// ══════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════
 let currentEvents = [];
 let lastFetchedAt = null;
 
-const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const SHORT_DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const FULL_DAYS  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const TOTAL_HOURS = CONFIG.HOUR_END - CONFIG.HOUR_START;
 
-// ══════════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════════
-function getWeekBounds() {
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const sunday = new Date(now);
-  sunday.setDate(now.getDate() - dayOfWeek);
-  sunday.setHours(0, 0, 0, 0);
-  const saturday = new Date(sunday);
-  saturday.setDate(sunday.getDate() + 7);
-  return { start: sunday, end: saturday };
+function startOfToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
 
-function getWeekDates() {
-  const { start } = getWeekBounds();
+function getWindowBounds() {
+  const start = startOfToday();
+  const end = new Date(start);
+  end.setDate(end.getDate() + 7);
+  return { start, end };
+}
+
+function getWindowDates() {
+  const { start } = getWindowBounds();
   return Array.from({length: 7}, (_, i) => {
     const d = new Date(start);
     d.setDate(d.getDate() + i);
     return d;
   });
+}
+
+function dayIndexFromToday(date) {
+  const today = startOfToday();
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d - today) / (24 * 60 * 60 * 1000));
 }
 
 function formatHour(h) {
@@ -516,7 +521,6 @@ function isSameDay(d1, d2) {
          d1.getDate() === d2.getDate();
 }
 
-// Compact formatter for the exercise room bar: 8a, 8:30a, 12p, etc.
 function formatHourCompact(h) {
   const hour = Math.floor(h);
   const min = Math.round((h - hour) * 60);
@@ -535,16 +539,68 @@ function formatExerciseRanges(events) {
     .join(', ');
 }
 
-// ══════════════════════════════════════════════
-// FETCH EVENTS FROM GOOGLE CALENDAR API
-// ══════════════════════════════════════════════
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+
+function assignLanes(events) {
+  if (events.length === 0) return [];
+  const sorted = [...events].sort((a, b) =>
+    a.startHour - b.startHour || a.endHour - b.endHour
+  );
+  const result = [];
+  const clusters = [];
+  let currentCluster = [];
+  let currentEnd = -Infinity;
+
+  for (const ev of sorted) {
+    if (currentCluster.length > 0 && ev.startHour < currentEnd) {
+      currentCluster.push(ev);
+      currentEnd = Math.max(currentEnd, ev.endHour);
+    } else {
+      if (currentCluster.length > 0) clusters.push(currentCluster);
+      currentCluster = [ev];
+      currentEnd = ev.endHour;
+    }
+  }
+  if (currentCluster.length > 0) clusters.push(currentCluster);
+
+  for (const cluster of clusters) {
+    const lanes = [];
+    const placement = new Map();
+    for (const ev of cluster) {
+      let placedLane = -1;
+      for (let i = 0; i < lanes.length; i++) {
+        const last = lanes[i][lanes[i].length - 1];
+        if (last.endHour <= ev.startHour) {
+          lanes[i].push(ev);
+          placedLane = i;
+          break;
+        }
+      }
+      if (placedLane === -1) {
+        lanes.push([ev]);
+        placedLane = lanes.length - 1;
+      }
+      placement.set(ev, placedLane);
+    }
+    const numLanes = lanes.length;
+    for (const ev of cluster) {
+      result.push({ ...ev, _lane: placement.get(ev), _totalLanes: numLanes });
+    }
+  }
+  return result;
+}
+
 async function fetchEvents() {
   if (CONFIG.CALENDAR_ID.startsWith('YOUR_') || CONFIG.API_KEY.startsWith('YOUR_')) {
-    showStatus('Calendar not yet configured — edit CALENDAR_ID and API_KEY in index.html', false);
+    showStatus('Calendar not yet configured', false);
     return [];
   }
 
-  const { start, end } = getWeekBounds();
+  const { start, end } = getWindowBounds();
   const url = 'https://www.googleapis.com/calendar/v3/calendars/' +
     encodeURIComponent(CONFIG.CALENDAR_ID) + '/events?' +
     'key=' + encodeURIComponent(CONFIG.API_KEY) +
@@ -564,19 +620,16 @@ async function fetchEvents() {
     lastFetchedAt = new Date();
 
     currentEvents = (data.items || []).flatMap(ev => {
-      // Skip cancelled events
       if (ev.status === 'cancelled') return [];
 
-      // Determine start/end as Date objects.
-      let start, end, isAllDay = false;
+      let evStart, evEnd, isAllDay = false;
       if (ev.start.dateTime) {
-        start = new Date(ev.start.dateTime);
-        end = new Date(ev.end.dateTime);
+        evStart = new Date(ev.start.dateTime);
+        evEnd = new Date(ev.end.dateTime);
       } else if (ev.start.date) {
-        // All-day event — Google encodes as YYYY-MM-DD
         isAllDay = true;
-        start = new Date(ev.start.date + 'T00:00:00');
-        end = new Date(ev.end.date + 'T00:00:00');
+        evStart = new Date(ev.start.date + 'T00:00:00');
+        evEnd = new Date(ev.end.date + 'T00:00:00');
       } else {
         return [];
       }
@@ -585,35 +638,35 @@ async function fetchEvents() {
       const location = (ev.location || '').trim();
       const isExerciseRoom = title.toLowerCase() === 'exercise room';
 
-      // For an all-day event, place it at the top of the day(s) it covers.
-      // For multi-day timed events, only render on the start day to keep things sane.
-      const startHour = start.getHours() + start.getMinutes() / 60;
-      let endHour = end.getHours() + end.getMinutes() / 60;
+      const dayIndex = dayIndexFromToday(evStart);
+      if (dayIndex < 0 || dayIndex > 6) return [];
 
-      // Crossing midnight or all-day → cap at end of day.
-      if (!isSameDay(start, end)) endHour = 24;
+      const startHour = evStart.getHours() + evStart.getMinutes() / 60;
+      let endHour = evEnd.getHours() + evEnd.getMinutes() / 60;
+      if (!isSameDay(evStart, evEnd)) endHour = 24;
       if (endHour === 0) endHour = 24;
+
       if (isAllDay) {
         return [{
-          title, space: location, start, end,
+          title, space: location, start: evStart, end: evEnd,
           startHour: CONFIG.HOUR_START,
           endHour: CONFIG.HOUR_START + 0.75,
-          dayIndex: start.getDay(),
+          dayIndex,
           isAllDay: true,
           isExerciseRoom,
         }];
       }
 
       return [{
-        title, space: location, start, end,
+        title, space: location, start: evStart, end: evEnd,
         startHour, endHour,
-        dayIndex: start.getDay(),
+        dayIndex,
         isAllDay: false,
         isExerciseRoom,
       }];
     });
 
-    showStatus('Loaded ' + currentEvents.length + ' events this week', true);
+    showStatus('Loaded ' + currentEvents.length + ' events', true);
 
     if (lastFetchedAt) {
       document.getElementById('lastSynced').textContent =
@@ -637,48 +690,49 @@ function showStatus(msg, ok) {
   if (ok) setTimeout(() => { bar.classList.remove('visible'); }, 10000);
 }
 
-// ══════════════════════════════════════════════
-// RENDER CALENDAR
-// ══════════════════════════════════════════════
 function buildCalendar() {
   const cal = document.getElementById('calendar');
   cal.innerHTML = '';
 
   const now = new Date();
-  const weekDates = getWeekDates();
+  const windowDates = getWindowDates();
 
-  // Week label
-  const ws = weekDates[0];
-  const we = weekDates[6];
-  document.getElementById('weekLabel').textContent =
-    `${MONTH_NAMES[ws.getMonth()]} ${ws.getDate()} – ${we.getDate()}, ${ws.getFullYear()}`;
+  const colWeights = Array.from({length: 7}, (_, i) =>
+    i === 0 ? CONFIG.TODAY_COLUMN_WEIGHT + 'fr' : '1fr'
+  );
+  cal.style.gridTemplateColumns = '80px ' + colWeights.join(' ');
 
-  // Header row
+  const ws = windowDates[0];
+  const we = windowDates[6];
+  const sameMonth = ws.getMonth() === we.getMonth();
+  const rangeLabel = sameMonth
+    ? MONTH_NAMES[ws.getMonth()] + ' ' + ws.getDate() + ' – ' + we.getDate() + ', ' + ws.getFullYear()
+    : MONTH_NAMES[ws.getMonth()] + ' ' + ws.getDate() + ' – ' + MONTH_NAMES[we.getMonth()] + ' ' + we.getDate() + ', ' + ws.getFullYear();
+  document.getElementById('weekLabel').textContent = rangeLabel;
+
   const timeCorner = document.createElement('div');
   timeCorner.className = 'time-header';
   cal.appendChild(timeCorner);
 
-  weekDates.forEach((d, i) => {
+  windowDates.forEach((d, i) => {
     const hdr = document.createElement('div');
-    const isToday = isSameDay(d, now);
-    const isPast = d < now && !isToday;
-    hdr.className = 'day-header' + (isToday ? ' today' : '') + (isPast ? ' past' : '');
-    let html = `${DAYS[i]}<span class="date-num">${d.getDate()}</span>`;
+    const isToday = i === 0;
+    hdr.className = 'day-header' + (isToday ? ' today' : '');
+    const labelText = isToday ? 'TODAY' : SHORT_DAYS[d.getDay()];
+    let html = labelText + '<span class="date-num">' + d.getDate() + '</span>';
 
-    // Exercise Room: render as a compact blue bar, not a time-grid block
     const exerciseToday = currentEvents.filter(e => e.dayIndex === i && e.isExerciseRoom);
     if (exerciseToday.length) {
-      html += `<span class="exercise-bar">
-        <span class="exercise-label">Exercise Room</span>
-        <span class="exercise-hours">${formatExerciseRanges(exerciseToday)}</span>
-      </span>`;
+      html += '<span class="exercise-bar">' +
+        '<span class="exercise-label">Exercise Room</span>' +
+        '<span class="exercise-hours">' + formatExerciseRanges(exerciseToday) + '</span>' +
+      '</span>';
     }
 
     hdr.innerHTML = html;
     cal.appendChild(hdr);
   });
 
-  // Time labels column
   const timeCol = document.createElement('div');
   timeCol.className = 'time-labels';
   for (let h = CONFIG.HOUR_START; h <= CONFIG.HOUR_END; h++) {
@@ -691,17 +745,11 @@ function buildCalendar() {
   }
   cal.appendChild(timeCol);
 
-  // Day columns
   for (let dayIdx = 0; dayIdx < 7; dayIdx++) {
     const col = document.createElement('div');
     col.className = 'day-column';
+    if (dayIdx === 0) col.classList.add('today-col');
 
-    const isToday = isSameDay(weekDates[dayIdx], now);
-    const isPast = weekDates[dayIdx] < now && !isToday;
-    if (isToday) col.classList.add('today-col');
-    if (isPast) col.classList.add('past-col');
-
-    // Hour grid lines
     for (let h = CONFIG.HOUR_START; h <= CONFIG.HOUR_END; h++) {
       const pct = ((h - CONFIG.HOUR_START) / TOTAL_HOURS) * 100;
       const line = document.createElement('div');
@@ -710,10 +758,10 @@ function buildCalendar() {
       col.appendChild(line);
     }
 
-    // Events for this day (Exercise Room is rendered as a header bar instead)
     const dayEvents = currentEvents.filter(e => e.dayIndex === dayIdx && !e.isExerciseRoom);
-    dayEvents.forEach(ev => {
-      // Clamp into displayed range so off-hours events still show at the edge.
+    const layedOut = assignLanes(dayEvents);
+
+    layedOut.forEach(ev => {
       const clampedStart = Math.max(ev.startHour, CONFIG.HOUR_START);
       const clampedEnd = Math.min(ev.endHour, CONFIG.HOUR_END);
       if (clampedEnd <= CONFIG.HOUR_START || clampedStart >= CONFIG.HOUR_END) return;
@@ -721,26 +769,32 @@ function buildCalendar() {
       const topPct = ((clampedStart - CONFIG.HOUR_START) / TOTAL_HOURS) * 100;
       const heightPct = ((clampedEnd - clampedStart) / TOTAL_HOURS) * 100;
 
+      const totalLanes = ev._totalLanes;
+      const laneWidth = 100 / totalLanes;
+      const leftPct = ev._lane * laneWidth;
+
       const duration = clampedEnd - clampedStart;
       const isCompact = duration <= 2;
+      const isNarrow = totalLanes >= 3;
+
       const block = document.createElement('div');
-      block.className = 'event' + (isCompact ? ' compact' : '');
+      block.className = 'event' + (isCompact ? ' compact' : '') + (isNarrow ? ' narrow' : '');
       block.style.top = topPct + '%';
       block.style.height = heightPct + '%';
+      block.style.left = 'calc(' + leftPct + '% + 3px)';
+      block.style.width = 'calc(' + laneWidth + '% - 6px)';
 
       const startLabel = ev.isAllDay ? 'All day' : formatHour(Math.floor(ev.startHour));
       const endLabel = ev.isAllDay ? '' : ' – ' + formatHour(Math.floor(ev.endHour));
 
-      block.innerHTML = `
-        <div class="client-name">${escapeHtml(ev.title)}</div>
-        <div class="time-range">${startLabel}${endLabel}</div>
-        <div class="space-name">${escapeHtml(ev.space)}</div>
-      `;
+      block.innerHTML =
+        '<div class="client-name">' + escapeHtml(ev.title) + '</div>' +
+        '<div class="time-range">' + startLabel + endLabel + '</div>' +
+        '<div class="space-name">' + escapeHtml(ev.space) + '</div>';
       col.appendChild(block);
     });
 
-    // Now indicator
-    if (isToday) {
+    if (dayIdx === 0) {
       const nowH = now.getHours() + now.getMinutes() / 60;
       if (nowH >= CONFIG.HOUR_START && nowH <= CONFIG.HOUR_END) {
         const nowPct = ((nowH - CONFIG.HOUR_START) / TOTAL_HOURS) * 100;
@@ -763,40 +817,26 @@ function buildCalendar() {
   }
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  })[c]);
-}
-
-// ══════════════════════════════════════════════
-// RENDER MOBILE VIEW
-// ══════════════════════════════════════════════
 function buildMobileView() {
   const container = document.getElementById('mobileView');
   container.innerHTML = '';
 
-  const now = new Date();
-  const weekDates = getWeekDates();
-  const FULL_DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const windowDates = getWindowDates();
 
-  const todayIdx = now.getDay();
-  for (let offset = 0; offset < 7; offset++) {
-    const dayIdx = (todayIdx + offset) % 7;
-    const date = weekDates[dayIdx];
-    const isToday = isSameDay(date, now);
-    const isPast = date < now && !isToday;
+  for (let dayIdx = 0; dayIdx < 7; dayIdx++) {
+    const date = windowDates[dayIdx];
+    const isToday = dayIdx === 0;
 
     const section = document.createElement('div');
-    section.className = 'm-day' + (isToday ? ' m-today' : '') + (isPast ? ' m-past' : '');
+    section.className = 'm-day' + (isToday ? ' m-today' : '');
 
-    const dateStr = `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
-    section.innerHTML = `<div class="m-day-header">
-      <span class="m-day-name">${isToday ? 'Today' : FULL_DAYS[dayIdx]}</span>
-      <span class="m-day-date">${dateStr}</span>
-    </div>`;
+    const dateStr = MONTH_NAMES[date.getMonth()] + ' ' + date.getDate();
+    const labelText = isToday ? 'Today' : FULL_DAYS[date.getDay()];
+    section.innerHTML = '<div class="m-day-header">' +
+      '<span class="m-day-name">' + labelText + '</span>' +
+      '<span class="m-day-date">' + dateStr + '</span>' +
+      '</div>';
 
-    // Exercise Room: render as a blue bar (not as a regular event card)
     const exerciseToday = currentEvents.filter(e => e.dayIndex === dayIdx && e.isExerciseRoom);
     if (exerciseToday.length) {
       const bar = document.createElement('div');
@@ -820,11 +860,11 @@ function buildMobileView() {
         card.className = 'm-event';
         const startLabel = ev.isAllDay ? 'All day' : formatHour(Math.floor(ev.startHour));
         const endLabel = ev.isAllDay ? '' : ' – ' + formatHour(Math.floor(ev.endHour));
-        card.innerHTML = `<div class="m-event-info">
-          <div class="m-client">${escapeHtml(ev.title)}</div>
-          <div class="m-time">${startLabel}${endLabel}</div>
-          <div class="m-space">${escapeHtml(ev.space)}</div>
-        </div>`;
+        card.innerHTML = '<div class="m-event-info">' +
+          '<div class="m-client">' + escapeHtml(ev.title) + '</div>' +
+          '<div class="m-time">' + startLabel + endLabel + '</div>' +
+          '<div class="m-space">' + escapeHtml(ev.space) + '</div>' +
+          '</div>';
         section.appendChild(card);
       });
     }
@@ -833,18 +873,12 @@ function buildMobileView() {
   }
 }
 
-// ══════════════════════════════════════════════
-// CLOCK
-// ══════════════════════════════════════════════
 function updateClock() {
   document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', {
     hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
   });
 }
 
-// ══════════════════════════════════════════════
-// MAIN LOOP
-// ══════════════════════════════════════════════
 async function init() {
   await fetchEvents();
   buildCalendar();
@@ -854,11 +888,7 @@ async function init() {
 
   updateClock();
   setInterval(updateClock, 1000);
-
-  // Rebuild calendar every minute (to slide the now-line and update past/today)
   setInterval(() => { buildCalendar(); buildMobileView(); }, 60 * 1000);
-
-  // Re-fetch from Google Calendar every 15 minutes
   setInterval(async () => {
     await fetchEvents();
     buildCalendar();
